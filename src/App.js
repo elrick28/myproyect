@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+//Context
+import { CRMContext, CRMProvider } from "./Context/CRMContext";
+import Spinner from "./Components/layouts/Spinner";
 
 function App() {
+  const Header = lazy(() => import('./Components/layouts/Header'));
+  const Home = lazy(() => import('./Components/Home/Home'));
+  const Login = lazy(() => import('./Components/User/LogIn/Login'));
+  const Signup = lazy(() => import('./Components/User/SignUp/Signup'));
+  const Comunity = lazy(() => import('./Components/User/Comunity/Comunity'));
+  const Machines = lazy(() => import('./Components/User/Machines/Machines'));
+  const EditMachine = lazy(() => import('./Components/User/Machines/EditMachine'));
+  const [auth, guardarToken] = useContext(CRMContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Suspense fallback={<Spinner />}>
+        <CRMProvider value={[auth, guardarToken]}>
+          <Header />
+          <Switch fallback={<Spinner />} >
+            <Route exact path='/' component={Home} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/signin' component={Signup} />
+            <Route exact path='/comunity' component={Comunity} />
+            <Route exact path='/machines' component={Machines} />
+            <Route exact path="/machines/editar/:vmId" component={EditMachine} />
+          </Switch>
+        </CRMProvider>
+      </Suspense>
+    </Router>
   );
 }
-
 export default App;
