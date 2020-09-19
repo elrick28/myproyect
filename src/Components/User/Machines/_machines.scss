@@ -139,7 +139,7 @@
       cursor: pointer;
     }
   }
-  & a{
+  & a {
     font-size: 16px;
     color: #ffffff;
     padding: 5px 30px;
@@ -155,11 +155,10 @@
   }
   & .btn-editar {
     background-color: #e9af0f;
-
-    & a {
-      text-decoration: none;
-      color: white;
-    }
+  }
+  & a {
+    color: #ffffff;
+    text-decoration: none;
   }
 }
 ///// - SPINNER  - /////////@at-root

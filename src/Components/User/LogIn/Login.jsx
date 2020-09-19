@@ -15,6 +15,16 @@ const Login = ({ history }) => {
     });
   };
 
+  function validarEmail(email) {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      //alert("La dirección de email " + valor + " es correcta.");
+      return false;
+    } else {
+      //alert("La dirección de email es incorrecta.");
+      return true;
+    }
+  }
+
   const iniciarSesion = async (e) => {
     e.preventDefault();
     const { email, pass } = usuario;
@@ -22,6 +32,13 @@ const Login = ({ history }) => {
       Swal.fire({
         icon: "warning",
         text: "Todos los campos son obligatorios.",
+      });
+    } else if (!validarEmail(email)) {
+      Swal.fire({
+        icon: "warning",
+        text: "Email no valido, intenta de nuevo",
+        showConfirmButton: false,
+        timer: 1500,
       });
     } else {
       await clienteAxios
@@ -31,7 +48,6 @@ const Login = ({ history }) => {
           },
         })
         .then((resp) => {
-          console.log(resp);
           if (resp.status === 200) {
             const { token } = resp.data;
             localStorage.setItem("token", token);
@@ -40,6 +56,13 @@ const Login = ({ history }) => {
               auth: true,
             });
             history.push("/machines");
+            Swal.fire({
+              position: "bottom-start",
+              icon: "success",
+              text: `Bienvenido, ${resp.data.nombre}`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
           }
         })
         .catch((error) => {
@@ -72,7 +95,7 @@ const Login = ({ history }) => {
             <h4>
               <i className="far fa-envelope"></i> Email
             </h4>
-            <input type="text" name="email" onChange={leerDatos}></input>
+            <input type="email" name="email" onChange={leerDatos}></input>
           </div>
           <div>
             <h4>

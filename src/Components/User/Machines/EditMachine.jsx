@@ -33,7 +33,7 @@ const EditMachine = (props) => {
         setVm(resp.data);
       })
       .catch((error) => {
-        console.log(error);
+        if(error.response.data.status === 404) { props.history.push("/machines") }
       });
   };
 
@@ -49,8 +49,9 @@ const EditMachine = (props) => {
       })
       .then(() => {
         Swal.fire({
+          position: "bottom-start",
           icon: "success",
-          title: "Maquina virtual actualizada.",
+          text: "Maquina virtual actualizada.",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -64,7 +65,6 @@ const EditMachine = (props) => {
   useEffect(() => {
     searchMachine(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <div className="contenido">
       <div className="">
@@ -76,16 +76,12 @@ const EditMachine = (props) => {
                 name="nombre"
                 type="text"
                 defaultValue={vm.nombre}
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               />
             </div>
             <div className="machine_props">
               <label>Sistema Operativo:</label>
-              <select
-                name="so"
-                defaultValue={vm.so}
-                onChange={(event) => configureMachine(event)}
-              >
+              <select name="so" onChange={configureMachine} value={vm.so}>
                 <option disabled value="def">
                   -Seleccionar SO-
                 </option>
@@ -95,11 +91,7 @@ const EditMachine = (props) => {
             </div>
             <div>
               <label>Memoria RAM:</label>
-              <select
-                name="ram"
-                defaultValue={vm.ram}
-                onChange={(event) => configureMachine(event)}
-              >
+              <select name="ram" value={vm.ram} onChange={configureMachine}>
                 <option value="def" disabled>
                   -Seleccionar RAM-
                 </option>
@@ -110,16 +102,12 @@ const EditMachine = (props) => {
             </div>
             <div>
               <label>Memoria VRAM:</label>
-              <select
-                name="vram"
-                defaultValue={vm.vram}
-                onChange={(event) => configureMachine(event)}
-              >
+              <select name="vram" value={vm.vram} onChange={configureMachine}>
                 <option value="def" disabled>
                   -Seleccionar VRAM-
                 </option>
-                <option value="1024">16 MB</option>
-                <option value="2048">18 MB</option>
+                <option value="16">16 MB</option>
+                <option value="18">18 MB</option>
               </select>
             </div>
             <div>
@@ -127,14 +115,14 @@ const EditMachine = (props) => {
               <select
                 name="hdd"
                 defaultValue={vm.hdd}
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               >
                 <option value="def" disabled>
                   -Seleccionar HDD-
                 </option>
-                <option value="1024">10 GB</option>
-                <option value="2048">40 MB</option>
-                <option value="2048">70 MB</option>
+                <option value="10">10 GB</option>
+                <option value="40">40 MB</option>
+                <option value="70">70 MB</option>
               </select>
             </div>
           </div>
@@ -147,7 +135,7 @@ const EditMachine = (props) => {
                 name="usuarioRdp"
                 type="text"
                 defaultValue={vm.usuarioRdp}
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               />
             </div>
             <div>

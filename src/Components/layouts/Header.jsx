@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { CRMContext } from "../../Context/CRMContext";
 import jwt from "jsonwebtoken";
 import Aos from "aos";
 import "aos/dist/aos.css";
 
-const Header = (props) => {
+const Header = ({ history }) => {
   const [auth, guardarToken] = useContext(CRMContext);
   const [user, setCurrentUser] = useState({});
   const [showMenu, setShowMenu] = useState(false);
@@ -20,7 +20,7 @@ const Header = (props) => {
       auth: false,
     });
     localStorage.setItem("token", "");
-    props.history.push("/login");
+    history.push("/login");
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Header = (props) => {
     <header className="navbar">
       <Link to="/">
         <div className="logo">
-          <img src="./logo_header.png" alt="logo"></img>
+          <img src="/logo_header.png" alt="logo"></img>
           <h1 className="title">MyProyect</h1>
         </div>
       </Link>
@@ -43,14 +43,14 @@ const Header = (props) => {
       {!showMenu ? (
         <div className="nav_links" onClick={() => subMenu(true)}>
           {user ? <h4 className="nav_hide">{user.unique_name}</h4> : <></>}
-          <img src="./user_male.png" alt="user_image"></img>
+          <img src="/user_male.png" alt="user_image"></img>
           <i className="fas fa-caret-down"></i>
         </div>
       ) : (
         <>
           <div className="nav_links" onClick={() => subMenu(false)}>
             {user ? <h4 className="nav_hide">{user.unique_name}</h4> : <></>}
-            <img src="./user_male.png" alt="user_image"></img>
+            <img src="/user_male.png" alt="user_image"></img>
             <i className="fas fa-caret-down seton"></i>
             <div data-aos="zoom-in" className="submenu">
               <div className="links">
@@ -114,4 +114,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default withRouter(Header);

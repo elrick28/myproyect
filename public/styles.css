@@ -842,9 +842,9 @@
   background-color: #e9af0f;
 }
 
-.btn-group .btn-editar a {
+.btn-group a {
+  color: #ffffff;
   text-decoration: none;
-  color: white;
 }
 
 .sk-circle {

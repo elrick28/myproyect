@@ -39,9 +39,9 @@ function Machines(props) {
     }
   };
 
-  const configureMachine = (event) => {
-    event.preventDefault();
-    setVm({ ...vm, [event.target.name]: event.target.value });
+  const configureMachine = (e) => {
+    e.preventDefault();
+    setVm({ ...vm, [e.target.name]: e.target.value });
   };
 
   const saveMachine = async (event) => {
@@ -72,15 +72,6 @@ function Machines(props) {
               "Estamos generando tu maquina virtual, esto puede tardar algunos minutos..",
               "success"
             );
-            //reset form
-            document.getElementById("myForm").reset();
-            vm.nombre = "";
-            vm.so = "";
-            vm.ram = "";
-            vm.vram = "";
-            vm.hdd = "";
-            vm.usuarioRdp = "";
-            vm.passRdp = "";
           });
       } catch (error) {
         Swal.fire({
@@ -125,7 +116,7 @@ function Machines(props) {
               <input
                 name="nombre"
                 type="text"
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               />
             </div>
             <div className="machine_props">
@@ -133,7 +124,7 @@ function Machines(props) {
               <select
                 name="so"
                 defaultValue="def"
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               >
                 <option disabled value="def">
                   -Seleccionar SO-
@@ -147,7 +138,7 @@ function Machines(props) {
               <select
                 name="ram"
                 defaultValue="def"
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               >
                 <option value="def" disabled>
                   -Seleccionar RAM-
@@ -162,13 +153,13 @@ function Machines(props) {
               <select
                 name="vram"
                 defaultValue="def"
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               >
                 <option value="def" disabled>
                   -Seleccionar VRAM-
                 </option>
-                <option value="1024">16 MB</option>
-                <option value="2048">18 MB</option>
+                <option value="16">16 MB</option>
+                <option value="18">18 MB</option>
               </select>
             </div>
             <div>
@@ -176,14 +167,14 @@ function Machines(props) {
               <select
                 name="hdd"
                 defaultValue="def"
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               >
                 <option value="def" disabled>
                   -Seleccionar HDD-
                 </option>
-                <option value="1024">10 GB</option>
-                <option value="2048">40 MB</option>
-                <option value="2048">70 MB</option>
+                <option value="10">10 GB</option>
+                <option value="40">40 MB</option>
+                <option value="70">70 MB</option>
               </select>
             </div>
           </div>
@@ -195,7 +186,7 @@ function Machines(props) {
               <input
                 name="usuarioRdp"
                 type="text"
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               />
             </div>
             <div>
@@ -205,7 +196,7 @@ function Machines(props) {
               <input
                 name="passRdp"
                 type="password"
-                onChange={(event) => configureMachine(event)}
+                onChange={configureMachine}
               />
             </div>
             <div>

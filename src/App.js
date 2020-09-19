@@ -1,5 +1,6 @@
 import React, { useContext, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from "history";
 //Context
 import { CRMContext, CRMProvider } from "./Context/CRMContext";
 import Spinner from "./Components/layouts/Spinner";
@@ -12,10 +13,13 @@ function App() {
   const Comunity = lazy(() => import('./Components/User/Comunity/Comunity'));
   const Machines = lazy(() => import('./Components/User/Machines/Machines'));
   const EditMachine = lazy(() => import('./Components/User/Machines/EditMachine'));
+  const NotFound = lazy(() => import('./Components/layouts/NotFound'));
   const [auth, guardarToken] = useContext(CRMContext);
 
+  const history = createBrowserHistory();
+
   return (
-    <Router>
+    <Router history={history} >
       <Suspense fallback={<Spinner />}>
         <CRMProvider value={[auth, guardarToken]}>
           <Header />
@@ -26,6 +30,7 @@ function App() {
             <Route exact path='/comunity' component={Comunity} />
             <Route exact path='/machines' component={Machines} />
             <Route exact path="/machines/editar/:vmId" component={EditMachine} />
+            <Route component={NotFound} />
           </Switch>
         </CRMProvider>
       </Suspense>
