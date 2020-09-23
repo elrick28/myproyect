@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 //
 import { CRMContext } from "../../../Context/CRMContext";
 import YourMachines from "./YourMachines";
@@ -9,6 +9,7 @@ import shortid from "shortid";
 import jwt from "jsonwebtoken";
 
 function Machines(props) {
+  const [redirect, setRedirect] = useState(false);
   const [auth] = useContext(CRMContext);
   const [vm, setVm] = useState({});
   const [vms, guardarVms] = useState([]);
@@ -17,6 +18,7 @@ function Machines(props) {
     const currentUser = jwt.decode(auth.token);
     if (currentUser == null) {
       //props.history.push("/login");
+      setRedirect(true);
     } else {
       await clienteAxios
         .get(`api/maquinas/usuario/${currentUser.nameid}`, {
@@ -86,136 +88,145 @@ function Machines(props) {
     lookMachine(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!auth.token) {
-    props.history.push("/login");
-  }
-
-  return (
-    <div className="contenido">
-      <div className="disf">
-        <div className="suscripcion">
-          <div className="disb">
-            <div className="user_image">
-              <img src="./user_male.png" alt="user_image" />
-            </div>
-            <div className="sub_info">
-              <ul>
-                <li>Suscripción: Free</li>
-                <li>Capacidad: 1/2</li>
-              </ul>
-            </div>
-            <div className="btn">
-              <Link to="#">Ver Planes</Link>
+  if (redirect) {
+    return <Redirect to="/login" />;
+  } else {
+    return (
+      <div className="contenido">
+        <div className="disf">
+          <div className="suscripcion">
+            <div className="disb">
+              <div className="user_image">
+                <img src="./user_male.png" alt="user_image" />
+              </div>
+              <div className="sub_info">
+                <ul>
+                  <li>Suscripción: Free</li>
+                  <li>Capacidad: 1/2</li>
+                </ul>
+              </div>
+              <div className="btn">
+                <Link to="#">Ver Planes</Link>
+              </div>
             </div>
           </div>
+          <form className="crear_maquina" id="myForm">
+            <div className="">
+              <div>
+                <label>Nombra tu maquina: </label>
+                <input name="nombre" type="text" onChange={configureMachine} />
+              </div>
+              <div className="machine_props">
+                <label>Sistema Operativo:</label>
+                <select
+                  name="so"
+                  defaultValue="def"
+                  onChange={configureMachine}
+                >
+                  <option disabled value="def">
+                    -Seleccionar SO-
+                  </option>
+                  <option value="ubuntu">Ubuntu 18.04</option>
+                  <option value="debian">Debian 10</option>
+                </select>
+              </div>
+              <div>
+                <label>Memoria RAM:</label>
+                <select
+                  name="ram"
+                  defaultValue="def"
+                  onChange={configureMachine}
+                >
+                  <option value="def" disabled>
+                    -Seleccionar RAM-
+                  </option>
+                  <option value="1024">1024 MB</option>
+                  <option value="2048">2048 MB</option>
+                  <option value="4096">4096 MB</option>
+                </select>
+              </div>
+              <div>
+                <label>Memoria VRAM:</label>
+                <select
+                  name="vram"
+                  defaultValue="def"
+                  onChange={configureMachine}
+                >
+                  <option value="def" disabled>
+                    -Seleccionar VRAM-
+                  </option>
+                  <option value="16">16 MB</option>
+                  <option value="18">18 MB</option>
+                </select>
+              </div>
+              <div>
+                <label>Almacenamiento HDD:</label>
+                <select
+                  name="hdd"
+                  defaultValue="def"
+                  onChange={configureMachine}
+                >
+                  <option value="def" disabled>
+                    -Seleccionar HDD-
+                  </option>
+                  <option value="10">10 GB</option>
+                  <option value="40">40 MB</option>
+                  <option value="70">70 MB</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>
+                  Nombre de Usuario: <i className="far fa-question-circle"></i>
+                </label>
+                <input
+                  name="usuarioRdp"
+                  type="text"
+                  onChange={configureMachine}
+                />
+              </div>
+              <div>
+                <label>
+                  Contraseña: <i className="far fa-eye"></i>
+                </label>
+                <input
+                  name="passRdp"
+                  type="password"
+                  onChange={configureMachine}
+                />
+              </div>
+              <div>
+                {!auth.token ? (
+                  <div className="def-log">
+                    <Link to={"/login"}>
+                      <i className="fas fa-sign-in-alt"></i> Inicia Sesión Para
+                      Crear Tus Maquinas!
+                    </Link>
+                  </div>
+                ) : (
+                  <>
+                    <button type="submit" onClick={saveMachine}>
+                      <i className="fas fa-plus-circle"></i> Crear
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </form>
         </div>
-        <form className="crear_maquina" id="myForm">
-          <div className="">
-            <div>
-              <label>Nombra tu maquina: </label>
-              <input
-                name="nombre"
-                type="text"
-                onChange={configureMachine}
-              />
-            </div>
-            <div className="machine_props">
-              <label>Sistema Operativo:</label>
-              <select
-                name="so"
-                defaultValue="def"
-                onChange={configureMachine}
-              >
-                <option disabled value="def">
-                  -Seleccionar SO-
-                </option>
-                <option value="ubuntu">Ubuntu 18.04</option>
-                <option value="debian">Debian 10</option>
-              </select>
-            </div>
-            <div>
-              <label>Memoria RAM:</label>
-              <select
-                name="ram"
-                defaultValue="def"
-                onChange={configureMachine}
-              >
-                <option value="def" disabled>
-                  -Seleccionar RAM-
-                </option>
-                <option value="1024">1024 MB</option>
-                <option value="2048">2048 MB</option>
-                <option value="4096">4096 MB</option>
-              </select>
-            </div>
-            <div>
-              <label>Memoria VRAM:</label>
-              <select
-                name="vram"
-                defaultValue="def"
-                onChange={configureMachine}
-              >
-                <option value="def" disabled>
-                  -Seleccionar VRAM-
-                </option>
-                <option value="16">16 MB</option>
-                <option value="18">18 MB</option>
-              </select>
-            </div>
-            <div>
-              <label>Almacenamiento HDD:</label>
-              <select
-                name="hdd"
-                defaultValue="def"
-                onChange={configureMachine}
-              >
-                <option value="def" disabled>
-                  -Seleccionar HDD-
-                </option>
-                <option value="10">10 GB</option>
-                <option value="40">40 MB</option>
-                <option value="70">70 MB</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <div>
-              <label>
-                Nombre de Usuario: <i className="far fa-question-circle"></i>
-              </label>
-              <input
-                name="usuarioRdp"
-                type="text"
-                onChange={configureMachine}
-              />
-            </div>
-            <div>
-              <label>
-                Contraseña: <i className="far fa-eye"></i>
-              </label>
-              <input
-                name="passRdp"
-                type="password"
-                onChange={configureMachine}
-              />
-            </div>
-            <div>
-              <button type="submit" onClick={saveMachine}>
-                <i className="fas fa-plus-circle"></i> Crear
-              </button>
-            </div>
-          </div>
-        </form>
+        {!vms.length ? (
+          <h4>
+            Aun no tienes ninguna creada, cuando lo hagas apareceran aqui..
+          </h4>
+        ) : (
+          vms.map((vm) => (
+            <YourMachines key={vm.id} vms={vm} lookMachine={lookMachine} />
+          ))
+        )}
       </div>
-      {!vms.length ? (
-        <h4>Aun no tienes ninguna creada, cuando lo hagas apareceran aqui..</h4>
-      ) : (
-        vms.map((vm) => (
-          <YourMachines key={vm.id} vms={vm} lookMachine={lookMachine} />
-        ))
-      )}
-    </div>
-  );
+    );
+  }
 }
 
-export default withRouter(Machines);
+export default Machines;

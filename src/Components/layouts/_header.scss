@@ -78,7 +78,8 @@ $change-color: #2a8ad8;
   cursor: pointer;
 }
 .submenu {
-  margin-top: 200px;
+  right: 10%;
+  top: 10.5%;
   display: block;
   position: fixed;
   padding: 15px;
@@ -121,8 +122,8 @@ $change-color: #2a8ad8;
     border-color: #3b3b3b;
     border-radius: 5px;
     overflow: hidden;
-    right: 12%;
-    top: 11.5%;
+    right: 10%;
+    top: 10.5%;
 
     & i,
     h4 {

@@ -66,18 +66,17 @@ const Login = ({ history }) => {
           }
         })
         .catch((error) => {
-          const { StatusCode, Message } = error.response.data;
-          if (StatusCode === 404) {
+          if (error.response.status === 404) {
             Swal.fire({
               icon: "info",
-              text: Message,
+              text: error.response.data,
               showConfirmButton: false,
               timer: 1500,
             });
-          } else if (StatusCode === 401) {
+          } else if (error.response.status === 401) {
             Swal.fire({
               icon: "error",
-              text: "Contraseña incorrecta.",
+              text: error.response.data,
               showConfirmButton: false,
               timer: 1500,
             });

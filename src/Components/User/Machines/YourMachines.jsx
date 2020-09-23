@@ -55,13 +55,13 @@ const YourMachines = ({ vms, lookMachine }) => {
               Nombre: <span>{vms.nombre}</span>
             </h4>
             <h4>
-              Ram: <span>{vms.ram}</span>
+              Ram: <span>{vms.ram} MB</span>
             </h4>
             <h4>
-              VRam: <span>{vms.vram}</span>
+              VRam: <span>{vms.vram} MB</span>
             </h4>
             <h4>
-              HDD: <span>{vms.hdd}</span>
+              HDD: <span>{vms.hdd} GB</span>
             </h4>
           </div>
           <div>

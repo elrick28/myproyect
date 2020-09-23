@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
-import { withRouter, Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { PropTypes } from "prop-types";
 import { CRMContext } from "../../Context/CRMContext";
 import jwt from "jsonwebtoken";
-import Aos from "aos";
-import "aos/dist/aos.css";
 
 const Header = ({ history }) => {
   const [auth, guardarToken] = useContext(CRMContext);
-  const [user, setCurrentUser] = useState({});
+  const [user, setUser] = useState();
   const [showMenu, setShowMenu] = useState(false);
 
   const subMenu = (state) => {
@@ -20,14 +19,12 @@ const Header = ({ history }) => {
       auth: false,
     });
     localStorage.setItem("token", "");
-    history.push("/login");
+    history.push("/");
   };
 
   useEffect(() => {
-    const currentUser = jwt.decode(auth.token);
-    setCurrentUser(currentUser);
-    Aos.init({ duration: 500 }); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth.token]); // eslint-disable-next-line react-hooks/exhaustive-deps
+    setUser(jwt.decode(auth.token));
+  }, [auth.token]);
 
   return (
     <header className="navbar">
@@ -55,30 +52,29 @@ const Header = ({ history }) => {
             <div data-aos="zoom-in" className="submenu">
               <div className="links">
                 {user ? (
-                  <>
-                    <Link to="#">Pérfil</Link>
-                    <i className="fas fa-user-circle"></i>
-                  </>
+                  <div>
+                    <div className="links">
+                      <Link to="#">Pérfil</Link>
+                      <i className="fas fa-user-circle"></i>
+                    </div>
+                    <div className="links" onClick={logout}>
+                      <h4>Cerrar Sesión</h4>
+                      <i className="fas fa-sign-out-alt"></i>
+                    </div>
+                  </div>
                 ) : (
-                  <>
-                    <Link to="/login">Iniciar Sesión</Link>
-                    <i className="fas fa-user-circle"></i>
-                  </>
+                  <div>
+                    <div className="links">
+                      <Link to="/login">Iniciar Sesión</Link>
+                      <i className="fas fa-user-circle"></i>
+                    </div>
+                    <div className="links">
+                      <Link to="/signin">Crear Cuenta</Link>
+                      <i className="fas fa-user-circle"></i>
+                    </div>
+                  </div>
                 )}
               </div>
-              {user ? (
-                <>
-                  <div className="links" onClick={logout}>
-                    <h4>Cerrar Sesión</h4>
-                    <i className="fas fa-sign-out-alt"></i>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Link to="/signin">Crear Cuenta</Link>
-                  <i className="fas fa-user-circle"></i>
-                </>
-              )}
             </div>
           </div>
           <div
@@ -93,10 +89,6 @@ const Header = ({ history }) => {
             <div className="links">
               <Link to="/Machines">Mis Maquinas</Link>
               <i className="fas fa-laptop-code"></i>
-            </div>
-            <div className="links">
-              <Link to="#">Soporte</Link>
-              <i className="fas fa-info-circle"></i>
             </div>
             <div className="line_separator"></div>
             <div className="links">
@@ -114,4 +106,8 @@ const Header = ({ history }) => {
   );
 };
 
-export default withRouter(Header);
+Header.propTypes = {
+  headerType: PropTypes.string,
+};
+
+export default Header;

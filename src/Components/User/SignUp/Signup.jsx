@@ -57,11 +57,10 @@ const Signup = (props) => {
                 props.history.push("/login");
               }
             })
-            .catch(() => {
+            .catch((error) => {
               Swal.fire({
                 icon: "error",
-                title: "Hubo un error",
-                text: "Este usuario ya se encuentra registrado.",
+                text: error.response.data,
               });
             });
         }

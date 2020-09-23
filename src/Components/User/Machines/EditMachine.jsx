@@ -33,7 +33,9 @@ const EditMachine = (props) => {
         setVm(resp.data);
       })
       .catch((error) => {
-        if(error.response.data.status === 404) { props.history.push("/machines") }
+        if (error.response.status === 404) {
+          props.history.push("/machines");
+        }
       });
   };
 
@@ -58,7 +60,9 @@ const EditMachine = (props) => {
         props.history.push("/machines");
       })
       .catch((error) => {
-        props.history.push("/machines");
+        if (error.response.status === 500) {
+          props.history.push("/machines");
+        }
       });
   };
 

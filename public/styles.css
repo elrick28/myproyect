@@ -109,7 +109,8 @@
 }
 
 .submenu {
-  margin-top: 200px;
+  right: 10%;
+  top: 10.5%;
   display: block;
   position: fixed;
   padding: 15px;
@@ -157,8 +158,8 @@
     border-color: #3b3b3b;
     border-radius: 5px;
     overflow: hidden;
-    right: 12%;
-    top: 11.5%;
+    right: 10%;
+    top: 10.5%;
   }
   .submenu_two i,
   .submenu_two h4 {
@@ -191,15 +192,11 @@
   }
 }
 
-.center {
-  margin: auto;
-  margin-top: 200px;
-}
-
 .sk-chase {
-  width: 40px;
-  height: 40px;
-  position: relative;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  margin: 100px 45%;
   -webkit-animation: sk-chase 2.5s infinite linear both;
           animation: sk-chase 2.5s infinite linear both;
 }
@@ -668,6 +665,16 @@
 
 .crear_maquina button:hover {
   cursor: pointer;
+}
+
+.def-log {
+  border-radius: 5px;
+  background-color: #27b439;
+}
+
+.def-log a {
+  color: #ffffff;
+  text-decoration: none;
 }
 
 .suscripcion {

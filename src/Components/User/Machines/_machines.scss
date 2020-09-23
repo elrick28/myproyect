@@ -40,6 +40,15 @@
   }
 }
 
+.def-log {
+  border-radius: 5px;
+  background-color: #27b439;
+  & a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+}
+
 .suscripcion {
   margin-top: 20px;
   display: flex;
