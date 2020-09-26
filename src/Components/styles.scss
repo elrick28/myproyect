@@ -6,30 +6,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 
 $base: #202020;
-$btn-color: #2a8ad8;
 
 * {
   font-family: "Open Sans", sans-serif;
 }
-
 body {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  background-color: $base;
-  color: #ffffff;
+  background-color: #333333 !important;
 }
-.contenido {
-  padding: 100px 10%;
+input,
+select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
-.formulario {
+.contenedor {
+  width: 80%;
+  margin: 0 auto;
+  justify-content: center;
+}
+.centrar {
   display: flex;
   justify-content: center;
-  & ul {
-    list-style: none;
-  }
-}
-.btnA {
-  padding: 3px 6px;
-  background-color: $btn-color;
 }

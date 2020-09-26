@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import clienteAxios from "../../../Config/axios";
 import Swal from "sweetalert2";
+import { Input, Button, Icon, Form, Header } from "semantic-ui-react";
 
 const Signup = (props) => {
   const [newUser, setNewUser] = useState({});
@@ -69,61 +70,73 @@ const Signup = (props) => {
   };
 
   return (
-    <div className="contenido disf">
-      <div className="login">
-        <form>
-          <div className="disb">
-            <i className="fas fa-users especial"></i>
-            <h2>Unete a la comunidad!</h2>
-          </div>
-          <div>
-            <h4>
-              <i className="fas fa-user"></i> Nombre de usuario
-            </h4>
-            <input
+    <div className="contenedor">
+      <Form className="fix-color-form">
+        <Header as="h2" icon textAlign="center">
+          <Icon name="users" circular />
+          <Header.Content>Unete a la comunidad!</Header.Content>
+        </Header>
+        <div className="centrar space">
+          <Form.Field width={4}>
+            <Header as="h4">
+              <Icon name="user" />
+              <Header.Content>Nombre de usuario</Header.Content>
+            </Header>
+            <Input
               type="text"
               name="nombre"
               onChange={(e) => configurarUsuario(e)}
             />
-          </div>
-          <div>
-            <h4>
-              <i className="far fa-envelope"></i> Email
-            </h4>
+          </Form.Field>
+        </div>
+        <div className="centrar space">
+          <Form.Field width={4}>
+            <Header as="h4">
+              <Icon name="mail" />
+              <Header.Content>Email</Header.Content>
+            </Header>
             <input
               type="email"
               name="email"
               onChange={(e) => configurarUsuario(e)}
             />
-          </div>
-          <div>
-            <h4>
-              <i className="fas fa-unlock"></i> Contraseña
-            </h4>
-            <input
+          </Form.Field>
+        </div>
+        <div className="centrar space">
+          <Form.Field width={4}>
+            <Header as="h4">
+              <Icon name="unlock" />
+              <Header.Content>Contraseña</Header.Content>
+            </Header>
+            <Input
               type="password"
               name="pass"
               onChange={(e) => configurarUsuario(e)}
             />
-          </div>
-          <div>
-            <h4>
-              <i className="fas fa-lock"></i> Repetir Contraseña
-            </h4>
-            <input
+          </Form.Field>
+        </div>
+        <div className="centrar space">
+          <Form.Field width={4}>
+            <Header as="h4">
+              <Icon name="lock" />
+              <Header.Content>Repetir Contraseña</Header.Content>
+            </Header>
+            <Input
               type="password"
               name="repeatpass"
               onChange={(e) => configurarUsuario(e)}
             />
-          </div>
-          <div className="btn-login" onClick={registarUsuario}>
+          </Form.Field>
+        </div>
+        <div className="centrar space">
+          <Button size="large" positive onClick={registarUsuario}>
             Crear Cuenta
-          </div>
-          <div className="retorno">
-            <Link to={"/login"}>¿Ya tienes cuenta?, Inicia sesión</Link>
-          </div>
-        </form>
-      </div>
+          </Button>
+        </div>
+        <Header as="h4" className="centrar space">
+          <Link to="/login">¿Ya tienes cuenta?, Inicia sesión!</Link>
+        </Header>
+      </Form>
     </div>
   );
 };

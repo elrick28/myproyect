@@ -1,17 +1,18 @@
 import React, { useState, useContext } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import clienteAxios from "../../../Config/axios";
 import { CRMContext } from "../../../Context/CRMContext";
+import { Input, Button, Icon, Form, Header } from "semantic-ui-react";
 
 const Login = ({ history }) => {
   const [auth, guardarToken] = useContext(CRMContext);
   const [usuario, guardarUsuario] = useState({});
 
-  const leerDatos = (e) => {
+  const leerDatos = (e,data) => {
     guardarUsuario({
       ...usuario,
-      [e.target.name]: e.target.value,
+      [data.name]: data.value,
     });
   };
 
@@ -86,30 +87,49 @@ const Login = ({ history }) => {
   };
 
   return (
-    <div className="contenido disf">
-      <div className="login">
-        <form>
-          <i className="fas fa-user-circle especial"></i>
-          <div>
+    <div className="contenedor">
+      <Form className="fix-color-form">
+        <Header as="h2" icon textAlign="center">
+          <Icon name="user" circular />
+          <Header.Content>Inicia Sesión</Header.Content>
+        </Header>
+        <div className="centrar space">
+          <Form.Field width={4}>
             <h4>
-              <i className="far fa-envelope"></i> Email
+              <Icon name="mail" /> Email
             </h4>
-            <input type="email" name="email" onChange={leerDatos}></input>
-          </div>
-          <div>
+            <Input
+              className="centrar"
+              type="email"
+              placeholder="ejemplo@email.com"
+              name="email"
+              onChange={leerDatos}
+            ></Input>
+          </Form.Field>
+        </div>
+        <div className="centrar space">
+          <Form.Field width={4}>
             <h4>
-              <i className="fas fa-lock"></i> Contraseña
+              <Icon name="lock" /> Contraseña
             </h4>
-            <input type="password" name="pass" onChange={leerDatos}></input>
-          </div>
-          <div className="btn-login" onClick={iniciarSesion}>
+            <Input
+              className="centrar"
+              type="password"
+              placeholder="******"
+              name="pass"
+              onChange={leerDatos}
+            ></Input>
+          </Form.Field>
+        </div>
+        <div className="centrar spaace">
+          <Button size="large" className="centrar" positive onClick={iniciarSesion}>
             Iniciar Sesión
-          </div>
-          <div className="retorno">
-            <Link to={"/signin"}>Registrarse</Link>
-          </div>
-        </form>
-      </div>
+          </Button>
+        </div>
+        <Header as="h4" className="centrar space">
+          <Link to="/signin">¿No tienes cuenta?, Crea una!</Link>
+        </Header>
+      </Form>
     </div>
   );
 };

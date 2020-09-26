@@ -1,15 +1,17 @@
 import React, { useContext } from "react";
 import { PropTypes } from "prop-types";
 import { CRMContext, CRMProvider } from "../../Context/CRMContext";
-import Header from "./Header";
+import HeaderComponent from "./Header";
+import { Segment, Divider} from "semantic-ui-react";
 
 const Base = (props) => {
   const [auth, guardarToken] = useContext(CRMContext);
   return (
     <>
       <CRMProvider value={[auth, guardarToken]}>
-        <Header />
-        <section>{props.children}</section>
+        <HeaderComponent />
+        <Divider />
+        <Segment vertical>{props.children}</Segment>
       </CRMProvider>
     </>
   );
