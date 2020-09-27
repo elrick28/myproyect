@@ -21,9 +21,19 @@
 .form-content {
   min-width: 80%;
   margin-left: 45px;
+  & label{
+    color: #ffffff !important;
+  }
 }
 .fix-icons {
   & i {
     padding: 0;
   }
+}
+.machines {
+  border-style: ridge;
+  border-color: #000000;
+  margin-top: 10px !important;
+  padding: 20px !important;
+  border-radius: 10px;
 }

@@ -3,16 +3,32 @@ import { withRouter } from "react-router-dom";
 import { CRMContext } from "../../../Context/CRMContext";
 import clienteAxios from "../../../Config/axios";
 import Swal from "sweetalert2";
+import { Form, Icon, Input, Popup, Button } from "semantic-ui-react";
 
 const EditMachine = (props) => {
   const [auth] = useContext(CRMContext);
   const { vmId } = props.match.params;
   const [vm, setVm] = useState({});
   const [newVm, setNewVm] = useState({});
-
+  const options_so = [
+    { key: "1", text: "Ubuntu 18.20", value: "ubuntu" },
+    { key: "2", text: "Debian 10", value: "debian" },
+  ];
+  const options_hdd = [
+    { key: "1", text: "10 GB", value: "10" },
+    { key: "2", text: "40 GB", value: "40" },
+  ];
+  const options_ram = [
+    { key: "1", text: "1000 MB", value: "1000" },
+    { key: "2", text: "2000 MB", value: "2000" },
+  ];
+  const options_vram = [
+    { key: "1", text: "16 MB", value: "16" },
+    { key: "2", text: "18 MB", value: "18" },
+  ];
   const validarForm = () => {
     const { nombre, so, ram, vram, hdd, usuarioRdp, passRdp } = vm;
-    let valido =
+    const valido =
       !nombre || !so || !ram || !vram || !hdd || !usuarioRdp || !passRdp;
     return valido;
   };
@@ -70,101 +86,113 @@ const EditMachine = (props) => {
     searchMachine(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="contenido">
-      <div className="">
-        <form className="crear_maquina">
-          <div className="">
-            <div>
-              <label>Nombra tu maquina: </label>
-              <input
-                name="nombre"
-                type="text"
-                defaultValue={vm.nombre}
-                onChange={configureMachine}
-              />
-            </div>
-            <div className="machine_props">
-              <label>Sistema Operativo:</label>
-              <select name="so" onChange={configureMachine} value={vm.so}>
-                <option disabled value="def">
-                  -Seleccionar SO-
-                </option>
-                <option value="ubuntu">Ubuntu 18.04</option>
-                <option value="debian">Debian 10</option>
-              </select>
-            </div>
-            <div>
-              <label>Memoria RAM:</label>
-              <select name="ram" value={vm.ram} onChange={configureMachine}>
-                <option value="def" disabled>
-                  -Seleccionar RAM-
-                </option>
-                <option value="1024">1024 MB</option>
-                <option value="2048">2048 MB</option>
-                <option value="4096">4096 MB</option>
-              </select>
-            </div>
-            <div>
-              <label>Memoria VRAM:</label>
-              <select name="vram" value={vm.vram} onChange={configureMachine}>
-                <option value="def" disabled>
-                  -Seleccionar VRAM-
-                </option>
-                <option value="16">16 MB</option>
-                <option value="18">18 MB</option>
-              </select>
-            </div>
-            <div>
-              <label>Almacenamiento HDD:</label>
-              <select
-                name="hdd"
-                defaultValue={vm.hdd}
-                onChange={configureMachine}
-              >
-                <option value="def" disabled>
-                  -Seleccionar HDD-
-                </option>
-                <option value="10">10 GB</option>
-                <option value="40">40 MB</option>
-                <option value="70">70 MB</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <div>
-              <label>
-                Nombre de Usuario: <i className="far fa-question-circle"></i>
-              </label>
-              <input
-                name="usuarioRdp"
-                type="text"
-                defaultValue={vm.usuarioRdp}
-                onChange={configureMachine}
-              />
-            </div>
-            <div>
-              <label>
-                Contraseña: <i className="far fa-eye"></i>
-              </label>
-              <input
-                name="passRdp"
-                type="password"
-                defaultValue={vm.passRdp}
-                onChange={(event) => configureMachine(event)}
-              />
-            </div>
-            <div>
-              <button
-                type="submit"
-                disabled={validarForm()}
-                onClick={updateMachine}
-              >
-                <i className="fas fa-save"></i> Actualizar
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+    <div className="contenedor">
+      <Form className="form-content">
+        <Form.Group widths="equal">
+          <Form.Field className="fix-options">
+            <label>Nombra tu maquina: </label>
+            <Input
+              name="nombre"
+              type="text"
+              defaultValue={vm.nombre}
+              onChange={configureMachine}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Sistema Operativo:</label>
+            <Form.Select
+              name="so"
+              className="fix-options"
+              options={options_so}
+              placeholder="Windows.."
+              onChange={configureMachine}
+              defaultValue={vm.so}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Almacenamiento HDD:</label>
+            <Form.Select
+              name="hdd"
+              className="fix-options"
+              options={options_hdd}
+              placeholder="GB"
+              onChange={configureMachine}
+              defaultValue={vm.hdd}
+            />
+          </Form.Field>
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Field>
+            <label>Memoria Ram:</label>
+            <Form.Select
+              name="ram"
+              className="fix-options"
+              placeholder="MB"
+              onChange={configureMachine}
+              options={options_ram}
+              defaultValue={vm.ram}
+            ></Form.Select>
+          </Form.Field>
+          <Form.Field>
+            <label>Memoria VRam:</label>
+            <Form.Select
+              name="vram"
+              className="fix-options"
+              placeholder="MB"
+              options={options_vram}
+              onChange={configureMachine}
+              defaultValue={vm.vram}
+            ></Form.Select>
+          </Form.Field>
+        </Form.Group>
+        <Form.Group widths="equal" className="fix-icons">
+          <Form.Field>
+            <Popup
+              className="fix-options"
+              content="Usuario para protocolo de conexión RDP"
+              trigger={
+                <div>
+                  <label>Nombre de Usuario: </label>
+                  <Icon inverted size="large" name="info circle" />
+                </div>
+              }
+            />
+            <Input
+              defaultValue={vm.usuarioRdp}
+              name="usuarioRdp"
+              type="text"
+              onChange={configureMachine}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Popup
+              className="fix-options"
+              content="Contraseña para acceder por medio del protocolo de conexión RDP"
+              trigger={
+                <div>
+                  <label>Contraseña: </label>
+                  <Icon inverted size="large" name="eye" />
+                </div>
+              }
+            />
+            <Input
+              defaultValue={vm.passRdp}
+              name="passRdp"
+              type="password"
+              onChange={configureMachine}
+            />
+          </Form.Field>
+        </Form.Group>
+        <Button
+          size="huge"
+          fluid
+          color="blue"
+          onClick={updateMachine}
+          disabled={validarForm()}
+        >
+          <Icon name="save" /> Actualizar
+        </Button>
+      </Form>
     </div>
   );
 };

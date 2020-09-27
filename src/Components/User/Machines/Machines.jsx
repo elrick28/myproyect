@@ -13,7 +13,6 @@ import {
   Image,
   Input,
   Popup,
-  Segment,
   Button,
 } from "semantic-ui-react";
 
@@ -216,22 +215,25 @@ function Machines(props) {
               />
             </Form.Field>
           </Form.Group>
-          <Button size="large" fluid color="blue" onClick={saveMachine}>
+          <Button
+            type="submit"
+            size="huge"
+            fluid
+            color="blue"
+            onClick={saveMachine}
+          >
+            <Icon name="plus circle" />
             Crear
           </Button>
         </Form>
       </div>
-      <Segment inverted>
-        {!vms.length ? (
-          <h4>
-            Aun no tienes ninguna creada, cuando lo hagas apareceran aqui..
-          </h4>
-        ) : (
-          vms.map((vm) => (
-            <YourMachines key={vm.id} vms={vm} lookMachine={lookMachine} />
-          ))
-        )}
-      </Segment>
+      {!vms.length ? (
+        <h4>Aun no tienes ninguna creada, cuando lo hagas apareceran aqui..</h4>
+      ) : (
+        vms.map((vm) => (
+          <YourMachines key={vm.id} vms={vm} lookMachine={lookMachine} />
+        ))
+      )}
     </div>
   );
 }

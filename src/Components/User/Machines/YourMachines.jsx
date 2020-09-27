@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
+import { Grid, Image, Button, Icon, Table } from "semantic-ui-react";
 import { CRMContext } from "../../../Context/CRMContext";
 import Swal from "sweetalert2";
 import clienteAxios from "../../../Config/axios";
@@ -43,54 +44,90 @@ const YourMachines = ({ vms, lookMachine }) => {
   }, []);
 
   return (
-    <div className="maquinas_b" data-aos="zoom-in-up">
-      <div className="maquinas">
-        <div className="so">
-          <img src="./windows.png" alt="logo_so" />
-          <h4>SO: {vms.so}</h4>
-        </div>
-        <div className="m_espec">
-          <div className="d_info">
-            <h4>
-              Nombre: <span>{vms.nombre}</span>
-            </h4>
-            <h4>
-              Ram: <span>{vms.ram} MB</span>
-            </h4>
-            <h4>
-              VRam: <span>{vms.vram} MB</span>
-            </h4>
-            <h4>
-              HDD: <span>{vms.hdd} GB</span>
-            </h4>
-          </div>
-          <div>
-            <h4>
-              Usuario: <span>{vms.usuarioRdp}</span>
-            </h4>
-            <h4>
-              Contraseña: <span>{vms.passRdp}</span>
-            </h4>
-          </div>
-        </div>
-      </div>
-      <div className="btn-group">
-        {!vms.state ? (
-          <button className="btn-start">
-            <i className="far fa-play-circle" /> Iniciar
-          </button>
-        ) : (
-          <button className="btn-apagar">
-            <i className="fas fa-power-off" /> Apagar
-          </button>
-        )}
-        <Link className="btn-editar" to={`machines/editar/${vms.id}`}>
-          <i className="far fa-edit" /> Editar
-        </Link>
-        <button className="btn-apagar" onClick={deleteMachine}>
-          <i className="fas fa-power-off" /> Eliminar
-        </button>
-      </div>
+    <div className="contenedor machines">
+      <Grid divided>
+        <Grid.Column width={3}>
+          <Image src={"/windows.png"} />
+        </Grid.Column>
+        <Grid.Column width={6}>
+          <Table celled inverted>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell colSpan={2}>
+                  Maquina: {vms.nombre}
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>Sistema Operativo:</Table.Cell>
+                <Table.Cell>{vms.so}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Memoria RAM:</Table.Cell>
+                <Table.Cell>{vms.ram} MB</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Memoria VRAM:</Table.Cell>
+                <Table.Cell>{vms.vram} MB</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Almacenamiento HDD:</Table.Cell>
+                <Table.Cell>{vms.hdd} GB</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </Grid.Column>
+        <Grid.Column width={4}>
+          <Table celled inverted>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell colSpan={2}>
+                  Credenciales RDP
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>Usuario:</Table.Cell>
+                <Table.Cell>{vms.usuarioRdp}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Contraseña:</Table.Cell>
+                <Table.Cell>{vms.passRdp}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Puerto:</Table.Cell>
+                <Table.Cell>{vms.port}</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </Grid.Column>
+        <Grid.Column>
+          <Button.Group vertical size="huge">
+            <Button animated color="green">
+              <Button.Content hidden>Iniciar</Button.Content>
+              <Button.Content visible>
+                <Icon name="play circle" />
+              </Button.Content>
+            </Button>
+            <Link to={`/machines/editar/${vms.id}`}>
+              <Button animated color="yellow">
+                <Button.Content hidden>Editar</Button.Content>
+                <Button.Content visible>
+                  <Icon name="edit" />
+                </Button.Content>
+              </Button>
+            </Link>
+            <Button animated color="red" onClick={deleteMachine}>
+              <Button.Content hidden>Eliminar</Button.Content>
+              <Button.Content visible>
+                <Icon name="trash" />
+              </Button.Content>
+            </Button>
+          </Button.Group>
+        </Grid.Column>
+      </Grid>
     </div>
   );
 };
