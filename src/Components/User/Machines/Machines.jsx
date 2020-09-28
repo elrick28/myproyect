@@ -2,25 +2,29 @@ import React, { useState, useEffect, useContext } from "react";
 //import { Link } from "react-router-dom";
 import { CRMContext } from "../../../Context/CRMContext";
 import YourMachines from "./YourMachines";
+import UserCard from "../UserCard";
 import clienteAxios from "../../../Config/axios";
 import Swal from "sweetalert2";
 import shortid from "shortid";
 import jwt from "jsonwebtoken";
-import {
-  Card,
-  Form,
-  Icon,
-  Image,
-  Input,
-  Popup,
-  Button,
-} from "semantic-ui-react";
+import Aos from "aos";
+import { Form, Icon, Input, Popup, Button } from "semantic-ui-react";
 
-function Machines(props) {
-  //const [redirect, setRedirect] = useState(false);
+const Machines = (props) => {
   const [auth] = useContext(CRMContext);
   const [vm, setVm] = useState({});
   const [vms, guardarVms] = useState([]);
+  const [loader, setLoader] = useState(false);
+
+  if (!auth.token) {
+    props.history.push("/login");
+  }
+  const validarForm = () => {
+    const { nombre, so, ram, vram, hdd, usuarioRdp, passRdp } = vm;
+    const valido =
+      !nombre || !so || !ram || !vram || !hdd || !usuarioRdp || !passRdp;
+    return valido;
+  };
 
   const options_so = [
     { key: "1", text: "Ubuntu 18.20", value: "ubuntu" },
@@ -73,6 +77,7 @@ function Machines(props) {
 
   const saveMachine = async (event) => {
     event.preventDefault();
+    setLoader(true);
     const { nombre, so, ram, vram, hdd, usuarioRdp, passRdp } = vm;
     let valido =
       !nombre || !so || !ram || !vram || !hdd || !usuarioRdp || !passRdp;
@@ -81,6 +86,7 @@ function Machines(props) {
         icon: "warning",
         text: "Todos los campos son obligatorios.",
       });
+      setLoader(false);
     } else {
       const currentUser = jwt.decode(auth.token);
       if (!currentUser) {
@@ -102,39 +108,38 @@ function Machines(props) {
                 "Estamos generando tu maquina virtual, esto puede tardar algunos minutos..",
                 "success"
               );
+              setLoader(false);
+              setVm({ nombre: "" });
             });
         } catch (error) {
           Swal.fire({
             icon: "error",
             text: error,
           });
+          setLoader(false);
         }
       }
     }
   };
-
   useEffect(() => {
     lookMachine(); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    Aos.init({ duration: 700 }); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth.token]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <div className="contenedor">
       <div className="data-form">
-        <Card className="fix-card">
-          <Image src="/userdefault.jpg" wrapped ui={false} />
-          <Card.Content>
-            <Card.Header>Username</Card.Header>
-            <Card.Meta>UserType</Card.Meta>
-          </Card.Content>
-          <Card.Content extra>
-            <Icon name="code" /> 0/4 maquinas
-          </Card.Content>
-        </Card>
+        <UserCard />
         <Form className="form-content">
           <Form.Group widths="equal">
             <Form.Field className="fix-options">
               <label>Nombra tu maquina: </label>
-              <Input name="nombre" type="text" onChange={configureMachine} />
+              <Input
+                name="nombre"
+                placeholder="Machine X"
+                value={vm.nombre || ""}
+                onChange={configureMachine}
+              />
             </Form.Field>
             <Form.Field>
               <label>Sistema Operativo:</label>
@@ -142,7 +147,8 @@ function Machines(props) {
                 name="so"
                 className="fix-options"
                 options={options_so}
-                placeholder="Windows.."
+                placeholder="-Seleccionar-"
+                value={vm.so || ""}
                 onChange={configureMachine}
               />
             </Form.Field>
@@ -153,6 +159,7 @@ function Machines(props) {
                 className="fix-options"
                 options={options_hdd}
                 placeholder="GB"
+                value={vm.hdd || ""}
                 onChange={configureMachine}
               />
             </Form.Field>
@@ -164,6 +171,7 @@ function Machines(props) {
                 name="ram"
                 className="fix-options"
                 placeholder="MB"
+                value={vm.ram || ""}
                 onChange={configureMachine}
                 options={options_ram}
               ></Form.Select>
@@ -175,6 +183,7 @@ function Machines(props) {
                 className="fix-options"
                 placeholder="MB"
                 options={options_vram}
+                value={vm.vram || ""}
                 onChange={configureMachine}
               ></Form.Select>
             </Form.Field>
@@ -194,6 +203,7 @@ function Machines(props) {
               <Input
                 name="usuarioRdp"
                 type="text"
+                value={vm.usuarioRdp || ""}
                 onChange={configureMachine}
               />
             </Form.Field>
@@ -211,6 +221,7 @@ function Machines(props) {
               <Input
                 name="passRdp"
                 type="password"
+                value={vm.passRdp || ""}
                 onChange={configureMachine}
               />
             </Form.Field>
@@ -221,6 +232,8 @@ function Machines(props) {
             fluid
             color="blue"
             onClick={saveMachine}
+            loading={loader}
+            disabled={validarForm()}
           >
             <Icon name="plus circle" />
             Crear
@@ -231,11 +244,16 @@ function Machines(props) {
         <h4>Aun no tienes ninguna creada, cuando lo hagas apareceran aqui..</h4>
       ) : (
         vms.map((vm) => (
-          <YourMachines key={vm.id} vms={vm} lookMachine={lookMachine} />
+          <YourMachines
+            key={vm.id}
+            vms={vm}
+            lookMachine={lookMachine}
+            data-aos="fade-up"
+          />
         ))
       )}
     </div>
   );
-}
+};
 
 export default Machines;

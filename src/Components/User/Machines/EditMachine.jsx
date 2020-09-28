@@ -33,9 +33,9 @@ const EditMachine = (props) => {
     return valido;
   };
 
-  const configureMachine = (event) => {
+  const configureMachine = (event, data) => {
     event.preventDefault();
-    setNewVm({ ...vm, [event.target.name]: event.target.value });
+    setNewVm({ ...vm, [data.name]: data.value });
   };
 
   const searchMachine = async () => {
@@ -105,8 +105,8 @@ const EditMachine = (props) => {
               className="fix-options"
               options={options_so}
               placeholder="Windows.."
+              defaultValue={vm.so || ""}
               onChange={configureMachine}
-              defaultValue={vm.so}
             />
           </Form.Field>
           <Form.Field>

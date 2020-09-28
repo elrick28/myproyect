@@ -1,16 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { Grid, Image, Button, Icon, Table } from "semantic-ui-react";
 import { CRMContext } from "../../../Context/CRMContext";
 import Swal from "sweetalert2";
 import clienteAxios from "../../../Config/axios";
-import Aos from "aos";
 
 const YourMachines = ({ vms, lookMachine }) => {
   const [auth] = useContext(CRMContext);
+  const [loader, setLoader] = useState(false);
 
   const deleteMachine = async (event) => {
     event.preventDefault();
+    setLoader(true);
     Swal.fire({
       title: "¿Estas seguro?",
       text: "No podras recuperar esta maquina virtual!",
@@ -34,14 +35,13 @@ const YourMachines = ({ vms, lookMachine }) => {
               "Tu maquina virtual ha sido eliminada.",
               "success"
             );
+            setLoader(false);
           });
+      } else {
+        setLoader(false);
       }
     });
   };
-
-  useEffect(() => {
-    Aos.init({ duration: 500 });
-  }, []);
 
   return (
     <div className="contenedor machines">
@@ -104,7 +104,7 @@ const YourMachines = ({ vms, lookMachine }) => {
           </Table>
         </Grid.Column>
         <Grid.Column>
-          <Button.Group vertical size="huge">
+          <Button.Group className="fix-btn" vertical size="huge">
             <Button animated color="green">
               <Button.Content hidden>Iniciar</Button.Content>
               <Button.Content visible>
@@ -119,7 +119,12 @@ const YourMachines = ({ vms, lookMachine }) => {
                 </Button.Content>
               </Button>
             </Link>
-            <Button animated color="red" onClick={deleteMachine}>
+            <Button
+              loading={loader}
+              animated
+              color="red"
+              onClick={deleteMachine}
+            >
               <Button.Content hidden>Eliminar</Button.Content>
               <Button.Content visible>
                 <Icon name="trash" />

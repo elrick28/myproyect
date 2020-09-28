@@ -240,6 +240,22 @@
   border-radius: 10px;
 }
 
+.fix-btn button {
+  margin-bottom: 15px !important;
+}
+
+.btn-group {
+  padding: 10px !important;
+}
+
+.btn-group button {
+  margin-right: 20px !important;
+}
+
+.btn-group button:last-of-type {
+  margin-right: 0;
+}
+
 * {
   font-family: "Open Sans", sans-serif;
 }

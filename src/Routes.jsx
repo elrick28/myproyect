@@ -15,11 +15,9 @@ const Machines = lazy(() => import("./Components/User/Machines/Machines"));
 const EditMachine = lazy(() =>
   import("./Components/User/Machines/EditMachine")
 );
-//const [auth, guardarToken] = useContext(CRMContext);
-/*
-<CRMProvider value={[auth, guardarToken]}>
-</CRMProvider>
- */
+const Usuarios = lazy(() => import("./Components/User/Admin/Usuarios"));
+const UserProfile = lazy(() => import("./Components/User/UserProfile"));
+
 const Routes = ({ location }) => {
   return (
     <>
@@ -31,6 +29,8 @@ const Routes = ({ location }) => {
             <Route exact path="/signin" component={waitFor(Signup)} />
             <Route exact path="/comunity" component={waitFor(Comunity)} />
             <Route exact path="/machines" component={waitFor(Machines)} />
+            <Route exact path="/usuarios" component={waitFor(Usuarios)} />
+            <Route exact path="/perfil" component={waitFor(UserProfile)} />
             <Route
               exact
               path="/machines/editar/:vmId"

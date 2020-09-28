@@ -1,0 +1,9 @@
+.btn-group {
+  padding: 10px !important;
+  & button {
+    margin-right: 20px !important;
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}

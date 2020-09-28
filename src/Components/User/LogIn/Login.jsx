@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { withRouter, Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import clienteAxios from "../../../Config/axios";
 import { CRMContext } from "../../../Context/CRMContext";
@@ -7,9 +7,10 @@ import { Input, Button, Icon, Form, Header } from "semantic-ui-react";
 
 const Login = ({ history }) => {
   const [auth, guardarToken] = useContext(CRMContext);
+  const [loader, setLoader] = useState(false);
   const [usuario, guardarUsuario] = useState({});
 
-  const leerDatos = (e,data) => {
+  const leerDatos = (e, data) => {
     guardarUsuario({
       ...usuario,
       [data.name]: data.value,
@@ -28,12 +29,14 @@ const Login = ({ history }) => {
 
   const iniciarSesion = async (e) => {
     e.preventDefault();
+    setLoader(true);
     const { email, pass } = usuario;
     if (!email || !pass) {
       Swal.fire({
         icon: "warning",
         text: "Todos los campos son obligatorios.",
       });
+      setLoader(false);
     } else if (!validarEmail(email)) {
       Swal.fire({
         icon: "warning",
@@ -41,6 +44,7 @@ const Login = ({ history }) => {
         showConfirmButton: false,
         timer: 1500,
       });
+      setLoader(false);
     } else {
       await clienteAxios
         .post("api/usuarios/login", usuario, {
@@ -82,9 +86,16 @@ const Login = ({ history }) => {
               timer: 1500,
             });
           }
+          setLoader(false);
         });
     }
   };
+
+  useEffect(() => {
+    if (auth.auth) {
+      history.push("/machines");
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="contenedor">
@@ -122,7 +133,13 @@ const Login = ({ history }) => {
           </Form.Field>
         </div>
         <div className="centrar spaace">
-          <Button size="large" className="centrar" positive onClick={iniciarSesion}>
+          <Button
+            loading={loader}
+            size="large"
+            className="centrar"
+            positive
+            onClick={iniciarSesion}
+          >
             Iniciar Sesión
           </Button>
         </div>
@@ -134,4 +151,4 @@ const Login = ({ history }) => {
   );
 };
 
-export default withRouter(Login);
+export default Login;

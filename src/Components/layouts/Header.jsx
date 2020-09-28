@@ -33,14 +33,22 @@ const HeaderComponent = (props) => {
           <Header.Content as="h3" className="nav">
             {!currentUser ? (
               <>
-                <Link to="/machines">Productos</Link>
+                <Link to="/products">Productos</Link>
                 <Link to="/login">Iniciar Sesión</Link>
                 <Link to="/signin">Crear Cuenta</Link>
               </>
             ) : (
               <>
                 <Link to="/machines">Maquinas</Link>
-                <Link to="#">Pérfil</Link>
+
+                {currentUser.role === "admin" ? (
+                  <>
+                    <Link to="/usuarios">Usuarios</Link>
+                  </>
+                ) : (
+                  <></>
+                )}
+                <Link to="/perfil">Pérfil</Link>
                 <Link to="/login" onClick={logout}>
                   Cerrar Sesión
                 </Link>

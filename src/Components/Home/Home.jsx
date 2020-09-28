@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 
 const Home = (props) => {
   return (
-    <div className="contenido">
+    <div className="contenedor">
       <h1>Home</h1>
     </div>
   );

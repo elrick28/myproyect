@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { withRouter, Link } from "react-router-dom";
 import clienteAxios from "../../../Config/axios";
 import Swal from "sweetalert2";
 import { Input, Button, Icon, Form, Header } from "semantic-ui-react";
+import { CRMContext } from "../../../Context/CRMContext";
 
 const Signup = (props) => {
   const [newUser, setNewUser] = useState({});
-
+  const [loader, setLoader] = useState(false);
+  const [auth] = useContext(CRMContext);
+  if (auth.token) {
+    props.history.push("/machines");
+  }
   const configurarUsuario = (e) => {
     e.preventDefault();
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -24,12 +29,14 @@ const Signup = (props) => {
 
   const registarUsuario = async (e) => {
     e.preventDefault();
+    setLoader(true);
     const { nombre, email, pass, repeatpass } = newUser;
     if (!nombre || !email || !pass || !repeatpass) {
       Swal.fire({
         icon: "warning",
         text: "Todos los campos son obligatorios.",
       });
+      setLoader(false);
     } else {
       const valido = validarEmail(newUser.email);
       if (!valido) {
@@ -38,6 +45,7 @@ const Signup = (props) => {
           title: "Email no valido",
           text: "El email ingresado es incorrecto, intenta nuevamente.",
         });
+        setLoader(false);
       } else {
         if (newUser.pass !== newUser.repeatpass) {
           Swal.fire({
@@ -45,6 +53,7 @@ const Signup = (props) => {
             title: "Contraseña Incorrecta",
             text: "Las contraseñas no coinciden, vuelte a intentarlo.",
           });
+          setLoader(false);
         } else {
           await clienteAxios
             .post("api/usuarios", newUser)
@@ -57,12 +66,14 @@ const Signup = (props) => {
                 });
                 props.history.push("/login");
               }
+              setLoader(false);
             })
             .catch((error) => {
               Swal.fire({
                 icon: "error",
                 text: error.response.data,
               });
+              setLoader(false);
             });
         }
       }
@@ -129,7 +140,12 @@ const Signup = (props) => {
           </Form.Field>
         </div>
         <div className="centrar space">
-          <Button size="large" positive onClick={registarUsuario}>
+          <Button
+            loading={loader}
+            size="large"
+            positive
+            onClick={registarUsuario}
+          >
             Crear Cuenta
           </Button>
         </div>
